@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>co.edu.javeriana</groupId>
-	<artifactId>ras</artifactId>
+	<artifactId>RAS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>ras</name>
+	<name>RAS</name>
 	<description>ras for blockchain project</description>
 
 	<properties>

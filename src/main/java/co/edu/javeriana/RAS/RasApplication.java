@@ -1,4 +1,4 @@
-package co.edu.javeriana.ras;
+package co.edu.javeriana.RAS;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
