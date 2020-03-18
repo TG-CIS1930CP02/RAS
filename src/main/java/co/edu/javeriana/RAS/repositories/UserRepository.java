@@ -13,7 +13,7 @@ public interface UserRepository extends CrudRepository<User, Long>{
 			+ "WHERE "
 			+ "user.identificationNumber = ?1 AND "
 			+ "user.password = ?2")
-	public String getUserByIdentificationNumberAndPassword(Long identificationNumber,
+	public User getUserByIdentificationNumberAndPassword(Long identificationNumber,
 			String password);
 	
 	@Query("SELECT user FROM User user "
@@ -21,6 +21,6 @@ public interface UserRepository extends CrudRepository<User, Long>{
 			+ "user.identificationNumber = ?1 AND "
 			+ "user.password = ?2 AND "
 			+ "user.fingerprint = ?3 ")
-	public String getUserByIdentificationNumberPasswordAndFingerPrint(Long identificationNumber,
+	public User getUserByIdentificationNumberPasswordAndFingerprint(Long identificationNumber,
 			String password, String fingerprint);
 }
