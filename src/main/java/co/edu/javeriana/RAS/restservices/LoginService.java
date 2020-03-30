@@ -2,11 +2,16 @@ package co.edu.javeriana.RAS.restservices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.edu.javeriana.RAS.entitys.GenderEnum;
 import co.edu.javeriana.RAS.entitys.IdentificationTypeEnum;
+import co.edu.javeriana.RAS.entitys.Person;
 import co.edu.javeriana.RAS.entitys.User;
+import co.edu.javeriana.RAS.forms.LoginPasswordFingerprintForm;
+import co.edu.javeriana.RAS.forms.LoginPasswordForm;
 import co.edu.javeriana.RAS.repositories.UserRepository;
 import co.edu.javeriana.RAS.security.AuthenticationModeEnum;
 import co.edu.javeriana.RAS.security.jwt.JWTUtils;
@@ -20,31 +25,30 @@ public class LoginService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@PostMapping("/login_password")
+	@PostMapping("/login-password")
 	public User loginPassword(
-			@RequestParam(value = "healthEntityId", required = false) Long healthEntityId,
-			@RequestParam(value = "identificationNumber", required = false) Long identificationNumber,
-			@RequestParam(value = "password", required = false) String password) {
-		
-		User user = userRepository.getUserByIdentificationNumberAndPassword(identificationNumber, password);
+			@RequestBody(required = false) LoginPasswordForm form) {
+		User user = userRepository.getUserByIdentificationNumberAndPassword(form.getIdentificationType(), 
+				form.getIdentificationNumber(), form.getPassword());
+		String token = null;
 		if (user != null) {
-			String token = jwtUtils.getJWTToken(identificationNumber, healthEntityId,
-				AuthenticationModeEnum.PASSWORD_AUTHENTICATION);
+			token = jwtUtils.getJWTToken(user, form.getHealthEntityId(),
+				AuthenticationModeEnum.PASSWORD_AND_FINGERPRINT_AUTHENTICATION);
 			user.setToken(token);
-		}		
+		}
 		return user;		
 	}
 	
-	@PostMapping("/login_password_and_fingerprint")
+	
+	@PostMapping("/login-password_and_fingerprint")
 	public User loginPasswordAndFingerprint(
-			@RequestParam(value = "healthEntityId", required = false) Long healthEntityId,
-			@RequestParam(value= "identificationNumber", required = false) Long identificationNumber,
-			@RequestParam(value = "password", required = false) String password, 
-			@RequestParam(value = "fingerprint", required = false) String fingerprint) {
+			@RequestBody(required = false) LoginPasswordFingerprintForm form) {
 		
-		User user = userRepository.getUserByIdentificationNumberPasswordAndFingerprint(identificationNumber, password, fingerprint);
+		User user = userRepository.getUserByIdentificationNumberPasswordAndFingerprint(form.getIdentificationType(), 
+				form.getIdentificationNumber(), form.getPassword(), form.getFingerprint());
+		String token = null;
 		if (user != null) {
-			String token = jwtUtils.getJWTToken(identificationNumber, healthEntityId,
+			token = jwtUtils.getJWTToken(user, form.getHealthEntityId(),
 				AuthenticationModeEnum.PASSWORD_AND_FINGERPRINT_AUTHENTICATION);
 			user.setToken(token);
 		}	

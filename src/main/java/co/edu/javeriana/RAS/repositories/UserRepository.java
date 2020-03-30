@@ -5,22 +5,28 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import co.edu.javeriana.RAS.entitys.HealthEntity;
+import co.edu.javeriana.RAS.entitys.IdentificationTypeEnum;
+import co.edu.javeriana.RAS.entitys.Person;
 import co.edu.javeriana.RAS.entitys.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long>{
-	@Query("SELECT user FROM User user "
+	@Query("SELECT u FROM User u "
 			+ "WHERE "
-			+ "user.identificationNumber = ?1 AND "
-			+ "user.password = ?2")
-	public User getUserByIdentificationNumberAndPassword(Long identificationNumber,
+			+ "u.person.identificationType = ?1 AND "
+			+ "u.person.identificationNumber = ?2 AND "
+			+ "u.password = ?3")
+	public User getUserByIdentificationNumberAndPassword(IdentificationTypeEnum identificationType, 
+			Long identificationNumber,
 			String password);
 	
-	@Query("SELECT user FROM User user "
+	@Query("SELECT u FROM User u "
 			+ "WHERE "
-			+ "user.identificationNumber = ?1 AND "
-			+ "user.password = ?2 AND "
-			+ "user.fingerprint = ?3 ")
-	public User getUserByIdentificationNumberPasswordAndFingerprint(Long identificationNumber,
+			+ "u.person.identificationType = ?1 AND "
+			+ "u.person.identificationNumber = ?2 AND "
+			+ "u.password = ?3 AND "
+			+ "u.fingerprint = ?4 ")
+	public User getUserByIdentificationNumberPasswordAndFingerprint(IdentificationTypeEnum identificationType,
+			Long identificationNumber,
 			String password, String fingerprint);
 }

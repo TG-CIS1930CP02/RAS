@@ -1,10 +1,11 @@
 package co.edu.javeriana.RAS.entitys;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -13,27 +14,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "health_user")
 public class User {
-	@Id
 	@JsonIgnore
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long id;
-	
-	String name;
-	
-	String lastName;
-	
-	@Enumerated(EnumType.STRING)
-	IdentificationTypeEnum identificationType;
-	
-	@Column(unique = true)
-	Long identificationNumber;
-	
+		
 	@JsonIgnore
 	String password;
 	
+	@JsonIgnore
 	String fingerprint;
 	
 	@Transient
 	String token;
+	
+	@OneToOne
+	Person person;
+	
 
 	public Long getId() {
 		return id;
@@ -41,38 +38,6 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public IdentificationTypeEnum getIdentificationType() {
-		return identificationType;
-	}
-
-	public void setIdentificationType(IdentificationTypeEnum identificationType) {
-		this.identificationType = identificationType;
-	}
-
-	public Long getIdentificationNumber() {
-		return identificationNumber;
-	}
-
-	public void setIdentificationNumber(Long identificationNumber) {
-		this.identificationNumber = identificationNumber;
 	}
 
 	public String getPassword() {
@@ -98,5 +63,12 @@ public class User {
 	public void setFingerprint(String fingerprint) {
 		this.fingerprint = fingerprint;
 	}
-	
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
 }

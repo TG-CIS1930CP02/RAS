@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
+import co.edu.javeriana.RAS.entitys.User;
 import co.edu.javeriana.RAS.repositories.HealthEntityRepository;
 import co.edu.javeriana.RAS.security.AuthenticationModeEnum;
 import io.jsonwebtoken.Jwts;
@@ -19,21 +20,23 @@ public class JWTUtils {
 	@Autowired
 	private HealthEntityRepository healthEntityRepository;
 	
-	public String getJWTToken(Long identificationNumber, Long healthEntityId, AuthenticationModeEnum authenticationMode) {
+	public String getJWTToken(User user, Long healthEntityId, AuthenticationModeEnum authenticationMode) {
 		
-		String secretKey = healthEntityRepository.getSecretKeyById(healthEntityId);
-		
+		//String secretKey = healthEntityRepository.getSecretKeyById(healthEntityId);
+		String secretKey = "PRUEBAHE";
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.
 				commaSeparatedStringToAuthorityList(authenticationMode.getRole());
 		
 		String token = Jwts
 				.builder()
-				.setId("softtekJWT")
-				.setSubject(String.valueOf(identificationNumber))
+				.claim("name", user.getPerson().getName())
+				.claim("lastname", user.getPerson().getLastname())
+				.claim("identificationType", user.getPerson().getIdentificationType())
+				.claim("identificationNumber", user.getPerson().getIdentificationNumber())
 				.claim("authorities",
 						grantedAuthorities.stream()
-								.map(GrantedAuthority::getAuthority)
-								.collect(Collectors.toList()))
+						.map(GrantedAuthority::getAuthority)
+						.collect(Collectors.toList()))
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + 600000))
 				.signWith(SignatureAlgorithm.HS512,
