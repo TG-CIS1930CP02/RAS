@@ -1,10 +1,13 @@
 package co.edu.javeriana.RAS.entitys;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -31,6 +34,9 @@ public class User {
 	@OneToOne
 	Person person;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
+	List<Authorization> authorizations;	
 
 	public Long getId() {
 		return id;
@@ -71,4 +77,13 @@ public class User {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
+
+	public List<Authorization> getAuthorizations() {
+		return authorizations;
+	}
+
+	public void setAuthorizations(List<Authorization> authorizations) {
+		this.authorizations = authorizations;
+	}
+	
 }
