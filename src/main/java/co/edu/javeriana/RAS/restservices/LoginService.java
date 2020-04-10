@@ -45,12 +45,12 @@ public class LoginService {
 		return Base64.getEncoder().encodeToString(keyStore.getPublicKey().getEncoded());
 	}
 	
-	@PostMapping("/login-password")
+	@PostMapping(path = "/login-password", consumes = "application/json")
 	public User loginPassword(
 			@RequestBody(required = false) LoginPasswordForm form) throws NoSuchAlgorithmException {
-		User user = userRepository.getUserByIdentificationNumberAndPassword(form.getIdentificationType(), 
+		User user = userRepository.getUserByIdentificationAndPassword(form.getIdentificationType(), 
 				form.getIdentificationNumber(), form.getPassword());
-		HealthEntity healthEntity = healthEntityRepository.findById(form.getHealthEntityId()).get();
+		HealthEntity healthEntity = healthEntityRepository.getById(form.getHealthEntityId());
 		String token = null;
 		if (user != null && healthEntity != null) {
 			token = jwtUtils.getJWTToken(user, healthEntity,
@@ -61,13 +61,13 @@ public class LoginService {
 	}
 	
 	
-	@PostMapping("/login-password-and-fingerprint")
+	@PostMapping(path = "/login-password-and-fingerprint", consumes = "application/json")
 	public User loginPasswordAndFingerprint(
 			@RequestBody(required = false) LoginPasswordFingerprintForm form) throws NoSuchAlgorithmException {
 		
-		User user = userRepository.getUserByIdentificationNumberPasswordAndFingerprint(form.getIdentificationType(), 
+		User user = userRepository.getUserByIdentificationPasswordAndFingerprint(form.getIdentificationType(), 
 				form.getIdentificationNumber(), form.getPassword(), form.getFingerprint());
-		HealthEntity healthEntity = healthEntityRepository.findById(form.getHealthEntityId()).get();
+		HealthEntity healthEntity = healthEntityRepository.getById(form.getHealthEntityId());
 		String token = null;
 		if (user != null) {
 			token = jwtUtils.getJWTToken(user, healthEntity,
