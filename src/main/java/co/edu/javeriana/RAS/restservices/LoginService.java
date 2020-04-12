@@ -60,7 +60,7 @@ public class LoginService {
 			user.setToken(token);
 		}
 		else {
-			return new ResponseEntity<>(ErrorMessage.WRONG_CREDENTIALS, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(ErrorMessage.INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<>(user, HttpStatus.OK);		
 	}
@@ -79,7 +79,7 @@ public class LoginService {
 			user.setToken(token);
 		}	
 		else {
-			return new ResponseEntity<>(ErrorMessage.WRONG_CREDENTIALS, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(ErrorMessage.INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<>(user, HttpStatus.OK);	
 	}

@@ -1,7 +1,7 @@
 package co.edu.javeriana.RAS.security;
 
 public enum ErrorMessage {
-	WRONG_CREDENTIALS("The Credentials Are Wrong");
+	INVALID_CREDENTIALS("Invalid Credentials");
 	
 	private String message;
 	private ErrorMessage(String message) {
