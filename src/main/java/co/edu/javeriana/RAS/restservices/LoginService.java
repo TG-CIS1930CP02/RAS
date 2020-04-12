@@ -5,6 +5,8 @@ import java.util.Base64;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +24,7 @@ import co.edu.javeriana.RAS.forms.LoginPasswordForm;
 import co.edu.javeriana.RAS.repositories.HealthEntityRepository;
 import co.edu.javeriana.RAS.repositories.UserRepository;
 import co.edu.javeriana.RAS.security.AuthenticationModeEnum;
+import co.edu.javeriana.RAS.security.ErrorMessage;
 import co.edu.javeriana.RAS.security.JWTUtils;
 import co.edu.javeriana.RAS.security.KeyStore;
 
@@ -46,35 +49,39 @@ public class LoginService {
 	}
 	
 	@PostMapping("/login-password")
-	public User loginPassword(
-			@RequestBody(required = false) LoginPasswordForm form) throws NoSuchAlgorithmException {
+	public ResponseEntity<Object> loginPassword(LoginPasswordForm form) throws NoSuchAlgorithmException {
 		User user = userRepository.getUserByIdentificationNumberAndPassword(form.getIdentificationType(), 
 				form.getIdentificationNumber(), form.getPassword());
-		HealthEntity healthEntity = healthEntityRepository.findById(form.getHealthEntityId()).get();
+		HealthEntity healthEntity = healthEntityRepository.getById(form.getHealthEntityId());
 		String token = null;
 		if (user != null && healthEntity != null) {
 			token = jwtUtils.getJWTToken(user, healthEntity,
 				AuthenticationModeEnum.PASSWORD_AND_FINGERPRINT_AUTHENTICATION);
 			user.setToken(token);
 		}
-		return user;		
+		else {
+			return new ResponseEntity<>(ErrorMessage.WRONG_CREDENTIALS, HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<>(user, HttpStatus.OK);		
 	}
 	
 	
 	@PostMapping("/login-password-and-fingerprint")
-	public User loginPasswordAndFingerprint(
-			@RequestBody(required = false) LoginPasswordFingerprintForm form) throws NoSuchAlgorithmException {
+	public ResponseEntity<Object> loginPasswordAndFingerprint(LoginPasswordFingerprintForm form) throws NoSuchAlgorithmException {
 		
 		User user = userRepository.getUserByIdentificationNumberPasswordAndFingerprint(form.getIdentificationType(), 
 				form.getIdentificationNumber(), form.getPassword(), form.getFingerprint());
-		HealthEntity healthEntity = healthEntityRepository.findById(form.getHealthEntityId()).get();
+		HealthEntity healthEntity = healthEntityRepository.getById(form.getHealthEntityId());
 		String token = null;
 		if (user != null) {
 			token = jwtUtils.getJWTToken(user, healthEntity,
 				AuthenticationModeEnum.PASSWORD_AND_FINGERPRINT_AUTHENTICATION);
 			user.setToken(token);
 		}	
-		return user;		
+		else {
+			return new ResponseEntity<>(ErrorMessage.WRONG_CREDENTIALS, HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<>(user, HttpStatus.OK);	
 	}
 	
 	
