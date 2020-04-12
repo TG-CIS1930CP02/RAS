@@ -45,10 +45,11 @@ public class JWTUtils {
 	}
 	
 	private List<String> getGrantedAuthorities(AuthenticationModeEnum authenticationMode, 
-			User user, HealthEntity healthEntityId) {
+			User user, HealthEntity healthEntity) {
 		List<String> grantedAuthorities = new ArrayList<>();
 		grantedAuthorities.add(authenticationMode.getRole());
-		grantedAuthorities.addAll(authorizationRepository.getRoles(user, healthEntityId));
+		grantedAuthorities.add("HEALTH_ENTITY_" + healthEntity.getId());
+		grantedAuthorities.addAll(authorizationRepository.getRoles(user, healthEntity));
 		return grantedAuthorities;
 	}
 }
