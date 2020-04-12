@@ -49,7 +49,7 @@ public class LoginService {
 	}
 	
 	@PostMapping("/login-password")
-	public ResponseEntity<Object> loginPassword(LoginPasswordForm form) throws NoSuchAlgorithmException {
+	public ResponseEntity<Object> loginPassword(@RequestBody LoginPasswordForm form) throws NoSuchAlgorithmException {
 		User user = userRepository.getUserByIdentificationNumberAndPassword(form.getIdentificationType(), 
 				form.getIdentificationNumber(), form.getPassword());
 		HealthEntity healthEntity = healthEntityRepository.getById(form.getHealthEntityId());
@@ -67,7 +67,7 @@ public class LoginService {
 	
 	
 	@PostMapping("/login-password-and-fingerprint")
-	public ResponseEntity<Object> loginPasswordAndFingerprint(LoginPasswordFingerprintForm form) throws NoSuchAlgorithmException {
+	public ResponseEntity<Object> loginPasswordAndFingerprint(@RequestBody LoginPasswordFingerprintForm form) throws NoSuchAlgorithmException {
 		
 		User user = userRepository.getUserByIdentificationNumberPasswordAndFingerprint(form.getIdentificationType(), 
 				form.getIdentificationNumber(), form.getPassword(), form.getFingerprint());
