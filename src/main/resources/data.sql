@@ -17,16 +17,16 @@ VALUES (1, 'Hospital San Ignacio');
 
 
 INSERT INTO health_user(id, password, fingerprint, person_id)
-VALUES (1, '123', 'fingerprint01', 1);
+VALUES (1, '123', 'fingerprint_test', 1);
 
 INSERT INTO health_user(id, password, fingerprint, person_id)
-VALUES (2, '123', 'fingerprint01', 2);
+VALUES (2, '123', 'fingerprint_test', 2);
 
 INSERT INTO health_user(id, password, fingerprint, person_id)
-VALUES (3, '123', 'fingerprint01', 3);
+VALUES (3, '123', 'fingerprint_test', 3);
 
 INSERT INTO health_user(id, password, fingerprint, person_id)
-VALUES (4, '123', 'fingerprint01', 4);
+VALUES (4, '123', 'fingerprint_test', 4);
 
 
 
