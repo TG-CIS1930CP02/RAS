@@ -22,12 +22,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable()
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/login-password-and-fingerprint").permitAll();
-	}
-	
-	@Bean
-	public void generateKeys() {
-		
-	}
-
-	
+	}	
 }
