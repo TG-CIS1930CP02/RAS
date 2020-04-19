@@ -38,6 +38,8 @@ public class Person {
 	
 	@OneToMany(mappedBy = "user")
 	List<Qualification> qualifications;
+	
+	Boolean deceased = false;
 
 	public Long getId() {
 		return id;
@@ -102,7 +104,13 @@ public class Person {
 	public void setQualifications(List<Qualification> qualifications) {
 		this.qualifications = qualifications;
 	}
-	
-	
+
+	public Boolean getDeceased() {
+		return deceased;
+	}
+
+	public void setDeceased(Boolean deceased) {
+		this.deceased = deceased;
+	}
 	
 }

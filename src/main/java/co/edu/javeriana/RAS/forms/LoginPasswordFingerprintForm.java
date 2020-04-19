@@ -8,6 +8,8 @@ public class LoginPasswordFingerprintForm {
 	private Long identificationNumber;
 	private String password;
 	private String fingerprint;
+	
+	
 	public Long getHealthEntityId() {
 		return healthEntityId;
 	}

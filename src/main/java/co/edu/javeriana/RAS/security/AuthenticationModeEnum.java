@@ -13,6 +13,6 @@ public enum AuthenticationModeEnum {
 	}
 	public void setRole(String role) {
 		this.role = role;
-	}	
+	}
 	
 }
