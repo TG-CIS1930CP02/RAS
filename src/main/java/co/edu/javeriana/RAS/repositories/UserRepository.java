@@ -12,6 +12,14 @@ public interface UserRepository extends CrudRepository<User, Long>{
 	@Query("SELECT u FROM User u "
 			+ "WHERE "
 			+ "u.person.identificationType = ?1 AND "
+			+ "u.person.identificationNumber = ?2 ")
+	public User getUserByIdentification(IdentificationTypeEnum identificationType, 
+			Long identificationNumber);
+	
+	
+	@Query("SELECT u FROM User u "
+			+ "WHERE "
+			+ "u.person.identificationType = ?1 AND "
 			+ "u.person.identificationNumber = ?2 AND "
 			+ "u.fingerprint = ?3")
 	public User getUserByIdentificationAndFingerprint(IdentificationTypeEnum identificationType, 

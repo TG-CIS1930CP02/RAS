@@ -1,6 +1,11 @@
 package co.edu.javeriana.RAS.restservices;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,59 +31,100 @@ public class AuthorizationService {
 	@Autowired
 	private AuthorizationRepository authorizationRepository;
 	
+	@GetMapping(path = "/user/{identificationType}/{identificationNumber}/authorization/{role}/{healthEntityId}")
+	public ResponseEntity<Object> getAuthorization(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId,
+			@PathVariable RoleEnum role){
+		User user = userRepository.getUserByIdentification(identificationType, identificationNumber);
+		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
+		Authorization authorization = authorizationRepository.getAuthorization(user, healthEntity, role);
+		if (authorization != null) 
+			return new ResponseEntity<Object>(authorization, HttpStatus.OK);
+		else 
+			return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
+		
+	}
+	
 	@PostMapping(path = "/user/{identificationType}/{identificationNumber}/authorization/role_doctor/{healthEntityId}", consumes = "application/json")
-	public void authorizateDoctor(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
+	public ResponseEntity<Object> authorizateDoctor(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
 			@RequestBody String fingerprint){
 		User user = userRepository.getUserByIdentificationAndFingerprint(identificationType, identificationNumber, fingerprint);
 		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
 		if(user != null && healthEntity != null) {
+			List<String> roles = authorizationRepository.getRoles(user, healthEntity);
+			if (roles.contains(RoleEnum.ROLE_DOCTOR.toString()))
+				return new ResponseEntity<Object>(HttpStatus.CONFLICT);			
 			Authorization authorization = new Authorization();
 			authorization.setHealthEntity(healthEntity);
 			authorization.setRole(RoleEnum.ROLE_DOCTOR);
 			authorization.setUser(user);
 			authorizationRepository.save(authorization);
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	@PostMapping(path = "/user/{identificationType}/{identificationNumber}/authorization/role_patient/{healthEntityId}", consumes = "application/json")
-	public void authorizatePatient(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
+	public ResponseEntity<Object> authorizatePatient(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
 			@RequestBody String fingerprint){
 		User user = userRepository.getUserByIdentificationAndFingerprint(identificationType, identificationNumber, fingerprint);
 		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
 		if(user != null && healthEntity != null) {
+			List<String> roles = authorizationRepository.getRoles(user, healthEntity);
+			if (roles.contains(RoleEnum.ROLE_PATIENT.toString()))
+				return new ResponseEntity<Object>(HttpStatus.CONFLICT);	
 			Authorization authorization = new Authorization();
 			authorization.setHealthEntity(healthEntity);
 			authorization.setRole(RoleEnum.ROLE_PATIENT);
 			authorization.setUser(user);
 			authorizationRepository.save(authorization);
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	@PostMapping(path = "/user/{identificationType}/{identificationNumber}/authorization/role_nurse/{healthEntityId}", consumes = "application/json")
-	public void authorizateNurse(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
+	public ResponseEntity<Object> authorizateNurse(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
 			@RequestBody String fingerprint){
 		User user = userRepository.getUserByIdentificationAndFingerprint(identificationType, identificationNumber, fingerprint);
 		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
 		if(user != null && healthEntity != null) {
+			List<String> roles = authorizationRepository.getRoles(user, healthEntity);
+			if (roles.contains(RoleEnum.ROLE_NURSE.toString()))
+				return new ResponseEntity<Object>(HttpStatus.CONFLICT);	
 			Authorization authorization = new Authorization();
 			authorization.setHealthEntity(healthEntity);
 			authorization.setRole(RoleEnum.ROLE_NURSE);
 			authorization.setUser(user);
 			authorizationRepository.save(authorization);
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	@PostMapping(path = "/user/{identificationType}/{identificationNumber}/authorization/role_administrative_assistant/{healthEntityId}", consumes = "application/json")
-	public void authorizateAdministrativeAssistant(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
+	public ResponseEntity<Object> authorizateAdministrativeAssistant(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId, 
 			@RequestBody String fingerprint){
 		User user = userRepository.getUserByIdentificationAndFingerprint(identificationType, identificationNumber, fingerprint);
 		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
 		if(user != null && healthEntity != null) {
+			List<String> roles = authorizationRepository.getRoles(user, healthEntity);
+			if (roles.contains(RoleEnum.ROLE_ADMINISTRATIVE_ASSISTANT.toString()))
+				return new ResponseEntity<Object>(HttpStatus.CONFLICT);	
 			Authorization authorization = new Authorization();
 			authorization.setHealthEntity(healthEntity);
 			authorization.setRole(RoleEnum.ROLE_ADMINISTRATIVE_ASSISTANT);
 			authorization.setUser(user);
 			authorizationRepository.save(authorization);
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 		}
 	}
 
