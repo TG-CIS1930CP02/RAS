@@ -26,6 +26,7 @@ public class JWTUtils {
 	public String getJWTToken(User user, HealthEntity healthEntity, AuthenticationModeEnum authenticationMode){
 				
 		List<String> grantedAuthorities = getGrantedAuthorities(authenticationMode, user, healthEntity);
+		long hours = 8;
 		
 		String token = Jwts
 				.builder()
@@ -36,7 +37,7 @@ public class JWTUtils {
 				.claim("healthEntityId", healthEntity.getId())
 				.claim("authorities", grantedAuthorities)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 600000))
+				.setExpiration(new Date(System.currentTimeMillis() + (hours * 3600000)))
 				.signWith(SignatureAlgorithm.RS256,
 						keyStore.getPrivateKey()).compact();
 		
