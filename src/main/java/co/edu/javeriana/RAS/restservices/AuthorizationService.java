@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.javeriana.RAS.entitys.Authorization;
@@ -19,6 +20,9 @@ import co.edu.javeriana.RAS.entitys.User;
 import co.edu.javeriana.RAS.repositories.AuthorizationRepository;
 import co.edu.javeriana.RAS.repositories.HealthEntityRepository;
 import co.edu.javeriana.RAS.repositories.UserRepository;
+import co.edu.javeriana.RAS.security.AuthenticationModeEnum;
+import co.edu.javeriana.RAS.security.JWTTokenProcessor;
+import co.edu.javeriana.RAS.security.JWTUtils;
 
 @RestController
 public class AuthorizationService {
@@ -31,17 +35,36 @@ public class AuthorizationService {
 	@Autowired
 	private AuthorizationRepository authorizationRepository;
 	
-	@GetMapping(path = "/user/{identificationType}/{identificationNumber}/authorization/{role}/{healthEntityId}")
-	public ResponseEntity<Object> getAuthorization(@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable Long healthEntityId,
-			@PathVariable RoleEnum role){
-		User user = userRepository.getUserByIdentification(identificationType, identificationNumber);
-		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
-		Authorization authorization = authorizationRepository.getAuthorization(user, healthEntity, role);
-		if (authorization != null) 
-			return new ResponseEntity<Object>(authorization, HttpStatus.OK);
-		else 
-			return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
+	@Autowired
+	private JWTTokenProcessor jwtTokenProcessor;
+	
+	@Autowired
+	private JWTUtils jwtUtils;
+	
+	@GetMapping(path = "/authorization/patient/{identificationTypePatient}/{identificationNumberPatient}")
+	public ResponseEntity<String> getAuthorizationTokenForPatientInformation(@PathVariable IdentificationTypeEnum identificationTypePatient, @PathVariable Long identificationNumberPatient, @RequestHeader("Authorization") String token){
 		
+		Long healthEntityId = Long.valueOf(jwtTokenProcessor.getInformationFromToken(token, JWTTokenProcessor.HEALTH_ENTITY_ID));
+		IdentificationTypeEnum identificationType = IdentificationTypeEnum.valueOf(jwtTokenProcessor.getInformationFromToken(token, JWTTokenProcessor.IDENTIFICATION_TYPE));
+		Long identificationNumber = Long.valueOf(jwtTokenProcessor.getInformationFromToken(token, JWTTokenProcessor.IDENTIFICATION_NUMBER));
+		
+		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
+		User user = userRepository.getUserByIdentification(identificationType, identificationNumber);
+		User patient = userRepository.getUserByIdentification(identificationTypePatient, identificationNumberPatient);
+		
+		if (healthEntity != null && patient != null) {
+			Authorization authorization = authorizationRepository.getAuthorization(patient, healthEntity, RoleEnum.ROLE_PATIENT);
+			if (authorization != null) {
+				AuthenticationModeEnum authenticationMode = AuthenticationModeEnum.valueOf(jwtTokenProcessor.getInformationFromToken(token, JWTTokenProcessor.AUTHENTICATION_MODE));
+				return new ResponseEntity<String>(jwtUtils.getJWTTokenForPatientInformation(user, healthEntity, authenticationMode, patient), HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+			}
+		}
+		else {
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@PostMapping(path = "/user/{identificationType}/{identificationNumber}/authorization/role_doctor/{healthEntityId}", consumes = "application/json")

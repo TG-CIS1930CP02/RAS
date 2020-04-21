@@ -50,7 +50,7 @@ public class LoginService {
 		String token = null;
 		if (user != null && healthEntity != null) {
 			token = jwtUtils.getJWTToken(user, healthEntity,
-				AuthenticationModeEnum.PASSWORD_AND_FINGERPRINT_AUTHENTICATION);
+				AuthenticationModeEnum.PASSWORD_AUTHENTICATED_USER);
 			user.setToken(token);
 		}
 		else {
@@ -69,7 +69,7 @@ public class LoginService {
 		String token = null;
 		if (user != null) {
 			token = jwtUtils.getJWTToken(user, healthEntity,
-				AuthenticationModeEnum.PASSWORD_AND_FINGERPRINT_AUTHENTICATION);
+				AuthenticationModeEnum.PASSWORD_AND_FINGERPRINT_AUTHENTICATED_USER);
 			user.setToken(token);
 		}	
 		else {

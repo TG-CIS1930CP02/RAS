@@ -43,8 +43,8 @@ VALUES (2, 'Médico', '1999-05-05', 'Escuela de médicos', 1);
 INSERT INTO health_authorization(user_id, health_entity_id, role)
 VALUES (1, 1, 'ROLE_ADMINISTRATIVE_ASSISTANT');
 
-INSERT INTO health_authorization(user_id, health_entity_id, role)
-VALUES (1, 1, 'ROLE_ADMINISTRATOR');
+--INSERT INTO health_authorization(user_id, health_entity_id, role)
+--VALUES (1, 1, 'ROLE_ADMINISTRATOR');
 
 
 
