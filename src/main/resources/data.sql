@@ -34,14 +34,17 @@ VALUES (1, 'Ingeniero de sistemas', '1999-04-05', 'Pontificia Universidad Javeri
 INSERT INTO qualification(id, name, start_date, reporting_entity, user_id)
 VALUES (2, 'Médico', '1999-05-05', 'Escuela de médicos', 1);
 
---INSERT INTO health_authorization(user_id, health_entity_id, role)
---VALUES (1, 1, 'ROLE_DOCTOR');
+INSERT INTO health_authorization(user_id, health_entity_id, role)
+VALUES (1, 1, 'ROLE_DOCTOR');
 
 --INSERT INTO health_authorization(user_id, health_entity_id, role)
 --VALUES (1, 1, 'ROLE_NURSE');
 
 INSERT INTO health_authorization(user_id, health_entity_id, role)
 VALUES (1, 1, 'ROLE_ADMINISTRATIVE_ASSISTANT');
+
+INSERT INTO health_authorization(user_id, health_entity_id, role)
+VALUES (1, 1, 'ROLE_PATIENT');
 
 --INSERT INTO health_authorization(user_id, health_entity_id, role)
 --VALUES (1, 1, 'ROLE_ADMINISTRATOR');

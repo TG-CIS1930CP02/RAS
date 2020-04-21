@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import co.edu.javeriana.RAS.entitys.HealthEntity;
+import co.edu.javeriana.RAS.entitys.RoleEnum;
 import co.edu.javeriana.RAS.entitys.User;
 import co.edu.javeriana.RAS.repositories.AuthorizationRepository;
 import io.jsonwebtoken.Jwts;
@@ -74,13 +75,16 @@ public class JWTUtils {
 		grantedAuthorities.add("HEALTH_ENTITY_" + healthEntity.getId());
 		grantedAuthorities.addAll(authorizationRepository.getRoles(user, healthEntity));
 		grantedAuthorities.add(authenticationMode.toString());
+		if (grantedAuthorities.contains(RoleEnum.ROLE_PATIENT.toString())) {
+			grantedAuthorities.add("PATIENT_"+ user.getPerson().getIdentificationType() + "_" + user.getPerson().getIdentificationNumber());
+		}
 		return grantedAuthorities;
 	}
 	
 	private List<String> getGrantedAuthoritiesForPatientInformation(AuthenticationModeEnum authenticationMode, 
 			User user, HealthEntity healthEntity, User patient) {
 		List<String> grantedAuthorities = getGrantedAuthorities(authenticationMode, user, healthEntity);
-		grantedAuthorities.add("PATIENT_"+user.getPerson().getIdentificationType()+"_"+user.getPerson().getIdentificationNumber());
+		grantedAuthorities.add("PATIENT_"+patient.getPerson().getIdentificationType()+"_"+patient.getPerson().getIdentificationNumber());
 		return grantedAuthorities;
 	}
 }
