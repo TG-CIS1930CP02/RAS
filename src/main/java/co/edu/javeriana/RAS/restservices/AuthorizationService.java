@@ -20,6 +20,7 @@ import co.edu.javeriana.RAS.entitys.User;
 import co.edu.javeriana.RAS.repositories.AuthorizationRepository;
 import co.edu.javeriana.RAS.repositories.HealthEntityRepository;
 import co.edu.javeriana.RAS.repositories.UserRepository;
+import co.edu.javeriana.RAS.responses.TokenAuthorization;
 import co.edu.javeriana.RAS.security.AuthenticationModeEnum;
 import co.edu.javeriana.RAS.security.JWTTokenProcessor;
 import co.edu.javeriana.RAS.security.JWTUtils;
@@ -42,7 +43,7 @@ public class AuthorizationService {
 	private JWTUtils jwtUtils;
 	
 	@GetMapping(path = "/authorization/patient/{identificationTypePatient}/{identificationNumberPatient}")
-	public ResponseEntity<String> getAuthorizationTokenForPatientInformation(@PathVariable IdentificationTypeEnum identificationTypePatient, @PathVariable Long identificationNumberPatient, @RequestHeader("Authorization") String token){
+	public ResponseEntity<TokenAuthorization> getAuthorizationTokenForPatientInformation(@PathVariable IdentificationTypeEnum identificationTypePatient, @PathVariable Long identificationNumberPatient, @RequestHeader("Authorization") String token){
 		
 		Long healthEntityId = Long.valueOf(jwtTokenProcessor.getInformationFromToken(token, JWTTokenProcessor.HEALTH_ENTITY_ID));
 		IdentificationTypeEnum identificationType = IdentificationTypeEnum.valueOf(jwtTokenProcessor.getInformationFromToken(token, JWTTokenProcessor.IDENTIFICATION_TYPE));
@@ -56,14 +57,14 @@ public class AuthorizationService {
 			Authorization authorization = authorizationRepository.getAuthorization(patient, healthEntity, RoleEnum.ROLE_PATIENT);
 			if (authorization != null) {
 				AuthenticationModeEnum authenticationMode = AuthenticationModeEnum.valueOf(jwtTokenProcessor.getInformationFromToken(token, JWTTokenProcessor.AUTHENTICATION_MODE));
-				return new ResponseEntity<String>(jwtUtils.getJWTTokenForPatientInformation(user, healthEntity, authenticationMode, patient), HttpStatus.OK);
+				return new ResponseEntity<>(new TokenAuthorization(jwtUtils.getJWTTokenForPatientInformation(user, healthEntity, authenticationMode, patient)), HttpStatus.OK);
 			}
 			else {
-				return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+				return new ResponseEntity<TokenAuthorization>(HttpStatus.FORBIDDEN);
 			}
 		}
 		else {
-			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<TokenAuthorization>(HttpStatus.NOT_FOUND);
 		}
 	}
 	

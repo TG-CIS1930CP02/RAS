@@ -35,6 +35,8 @@ public class Person {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
 	Date birthDate;
 	
+	String bloodType;
+	
 	@Enumerated(EnumType.STRING)
 	GenderEnum gender;
 	
@@ -114,5 +116,13 @@ public class Person {
 	public void setDeceased(Boolean deceased) {
 		this.deceased = deceased;
 	}
+
+	public String getBloodType() {
+		return bloodType;
+	}
+
+	public void setBloodType(String bloodType) {
+		this.bloodType = bloodType;
+	}	
 	
 }
