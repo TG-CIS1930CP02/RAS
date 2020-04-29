@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -151,6 +152,24 @@ public class AuthorizationService {
 			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
+	
+	@GetMapping(path = "authorization/health-entity/{healthEntityId}")
+	public ResponseEntity<List<Authorization>> getAuthorizations(@PathVariable Long healthEntityId){
+		return ResponseEntity.ok(authorizationRepository.getAuthorizations(healthEntityId));		
+	}
+	
+	@DeleteMapping(path = "authorization/health-entity/{health_entity_id}/{identificationType}/{identificationNumber}/{role}")
+	public ResponseEntity<Object> deleteAuthorization(@PathVariable Long healthEntityId, 
+			@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable RoleEnum role){
+		User user = userRepository.getUserByIdentification(identificationType, identificationNumber);
+		HealthEntity healthEntity = healthEntityRepository.getById(healthEntityId);
+		Authorization authorization = authorizationRepository.getAuthorization(user, healthEntity, role);
+		if (authorization != null) {
+			authorizationRepository.delete(authorization);
+			return new ResponseEntity<Object>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
+	}
 
 }

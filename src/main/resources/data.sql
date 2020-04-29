@@ -40,14 +40,14 @@ VALUES (1, 1, 'ROLE_DOCTOR');
 --INSERT INTO health_authorization(user_id, health_entity_id, role)
 --VALUES (1, 1, 'ROLE_NURSE');
 
-INSERT INTO health_authorization(user_id, health_entity_id, role)
-VALUES (1, 1, 'ROLE_ADMINISTRATIVE_ASSISTANT');
+--INSERT INTO health_authorization(user_id, health_entity_id, role)
+--VALUES (1, 1, 'ROLE_ADMINISTRATIVE_ASSISTANT');
 
 --INSERT INTO health_authorization(user_id, health_entity_id, role)
 --VALUES (1, 1, 'ROLE_PATIENT');
 
---INSERT INTO health_authorization(user_id, health_entity_id, role)
---VALUES (1, 1, 'ROLE_ADMINISTRATOR');
+INSERT INTO health_authorization(user_id, health_entity_id, role)
+VALUES (1, 1, 'ROLE_ADMINISTRATOR');
 
 
 

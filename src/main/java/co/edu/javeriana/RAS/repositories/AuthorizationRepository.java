@@ -29,4 +29,11 @@ public interface AuthorizationRepository extends CrudRepository<Authorization, L
 			+ "a.role = ?3")
 	public Authorization getAuthorization(User user, HealthEntity healthEntity, RoleEnum role);
 	
+	@Query("SELECT a "
+			+ "FROM Authorization a "
+			+ "WHERE "
+			+ "a.healthEntity.id = ?1 AND "
+			+ "a.role NOT IN ('ROLE_ADMINISTRATOR', 'ROLE_PATIENT')")
+	public List<Authorization> getAuthorizations(Long healthEntityId);
+	
 }

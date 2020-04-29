@@ -23,7 +23,7 @@ public class JWTTokenProcessor {
 		}
 		String payload = new String(Base64.getDecoder().decode(parts.get(1)));
 		JSONObject payloadObject = new JSONObject(payload);
-		return payloadObject.get(parameter).toString();		
+		return payloadObject.get(parameter).toString();	
 	}
 	
 }
