@@ -159,7 +159,7 @@ public class AuthorizationService {
 		return ResponseEntity.ok(authorizationRepository.getAuthorizations(healthEntityId));		
 	}
 	
-	@DeleteMapping(path = "authorization/health-entity/{health_entity_id}/{identificationType}/{identificationNumber}/{role}")
+	@DeleteMapping(path = "authorization/health-entity/{healthEntityId}/{identificationType}/{identificationNumber}/{role}")
 	public ResponseEntity<Object> deleteAuthorization(@PathVariable Long healthEntityId, 
 			@PathVariable IdentificationTypeEnum identificationType, @PathVariable Long identificationNumber, @PathVariable RoleEnum role){
 		User user = userRepository.getUserByIdentification(identificationType, identificationNumber);
