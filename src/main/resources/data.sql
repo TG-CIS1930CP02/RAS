@@ -35,7 +35,7 @@ INSERT INTO qualification(id, name, start_date, reporting_entity, user_id)
 VALUES (2, 'Médico', '1999-05-05', 'Escuela de médicos', 1);
 
 INSERT INTO health_authorization(user_id, health_entity_id, role)
-VALUES (1, 1, 'ROLE_DOCTOR');
+VALUES (1, 1, 'ROLE_ADMINISTRATOR');
 
 --INSERT INTO health_authorization(user_id, health_entity_id, role)
 --VALUES (1, 1, 'ROLE_NURSE');
@@ -46,8 +46,8 @@ VALUES (1, 1, 'ROLE_DOCTOR');
 --INSERT INTO health_authorization(user_id, health_entity_id, role)
 --VALUES (1, 1, 'ROLE_PATIENT');
 
-INSERT INTO health_authorization(user_id, health_entity_id, role)
-VALUES (1, 1, 'ROLE_ADMINISTRATOR');
+--INSERT INTO health_authorization(user_id, health_entity_id, role)
+--VALUES (1, 1, 'ROLE_ADMINISTRATOR');
 
 
 
