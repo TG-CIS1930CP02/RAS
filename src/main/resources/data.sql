@@ -10,9 +10,15 @@ VALUES (3, 'Omar Steck', 'Espinel Santamaria', 'CC', 213, '1999-04-14', 'M', fal
 INSERT INTO person(id, name, lastName, identification_type, identification_number, birth_date, gender, deceased, blood_type)
 VALUES (4, 'Pedro Santiago', 'Lizarazo', 'CC', 132, '1999-04-14', 'M', false, 'O+');
 
-INSERT INTO health_entity(id, name)
-VALUES (1, 'Hospital San Ignacio');
 
+INSERT INTO health_entity(id, name)
+VALUES (1, 'Clinica A');
+
+INSERT INTO health_entity(id, name)
+VALUES (2, 'Clinica B');
+
+INSERT INTO health_entity(id, name)
+VALUES (3, 'Clinica C');
 
 
 INSERT INTO health_user(id, password, fingerprint, person_id)
@@ -36,6 +42,12 @@ VALUES (2, 'Médico', '1999-05-05', 'Escuela de médicos', 1);
 
 INSERT INTO health_authorization(user_id, health_entity_id, role)
 VALUES (1, 1, 'ROLE_ADMINISTRATOR');
+
+INSERT INTO health_authorization(user_id, health_entity_id, role)
+VALUES (1, 2, 'ROLE_ADMINISTRATOR');
+
+INSERT INTO health_authorization(user_id, health_entity_id, role)
+VALUES (1, 3, 'ROLE_ADMINISTRATOR');
 
 --INSERT INTO health_authorization(user_id, health_entity_id, role)
 --VALUES (1, 1, 'ROLE_NURSE');
